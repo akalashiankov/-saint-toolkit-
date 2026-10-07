@@ -1,0 +1,25 @@
+# config/report_config.yaml
+
+report:
+  title: "SAINT Security Assessment Report"
+  formats: ["md", "html", "json"]
+  severity_order: ["Critical", "High", "Medium", "Low", "Informational"]
+  owasp_top10_2021:
+    - "A01:2021-Broken Access Control"
+    - "A02:2021-Cryptographic Failures"
+    - "A03:2021-Injection"
+    - "A04:2021-Insecure Design"
+    - "A05:2021-Security Misconfiguration"
+    - "A06:2021-Vulnerable and Outdated Components"
+    - "A07:2021-Identification and Authentication Failures"
+    - "A08:2021-Software and Data Integrity Failures"
+    - "A09:2021-Security Logging and Monitoring Failures"
+    - "A10:2021-Server-Side Request Forgery"
+  include_sections:
+    - executive_summary
+    - scope_and_authorization
+    - methodology
+    - findings_by_severity
+    - findings_by_owasp_category
+    - manual_poc_notes
+    - appendix_raw_tool_output_references

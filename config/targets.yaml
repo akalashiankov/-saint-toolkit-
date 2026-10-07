@@ -1,0 +1,33 @@
+# config/targets.yaml
+#
+# SAINT only scans targets explicitly listed here. There is no "scan anything"
+# mode and no free-text target argument that bypasses this file for active
+# scanning. Adding a target to this file IS the authorization record.
+#
+# profile options:
+#   light - nmap top-1000 ports, ZAP spider + passive scan only (no active scan)
+#   full  - nmap full port range + service/version detection, ZAP spider +
+#           passive + active scan
+#
+# authorized_by / authorization_ref: fill these in before running a "full"
+# scan. This is your paper trail (e.g. a lab assignment, a signed pentest
+# authorization, or "personal lab - owned by me").
+
+targets:
+  - name: example-lab-app
+    host: your-authorized-test-app.example
+    base_url: https://your-authorized-test-app.example
+    profile: light
+    authorized_by: "CHANGE_ME - name/org who authorized this"
+    authorization_ref: "CHANGE_ME - ticket/doc/lab reference"
+    notes: "Example entry. Replace with your real lab target before running scans."
+
+# Global settings applied to every scan run unless overridden per-target.
+defaults:
+  nmap:
+    light_args: "-sV -T4 --top-ports 1000"
+    full_args: "-sV -sC -T4 -p-"
+  zap:
+    active_scan_allowed_profiles: ["full"]   # active scan only runs for these profiles
+    spider_max_depth: 5
+  require_authorization_ref: true   # refuse to run "full" profile if authorization_ref is a CHANGE_ME placeholder

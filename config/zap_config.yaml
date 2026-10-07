@@ -1,0 +1,19 @@
+# config/zap_config.yaml
+#
+# Connection settings for an OWASP ZAP instance already running in daemon mode, e.g.:
+#   zap.sh -daemon -port 8080 -config api.key=CHANGE_ME -config api.disablekey=false
+
+zap:
+  api_url: "http://127.0.0.1"
+  api_port: 8080
+  api_key_env_var: "ZAP_API_KEY"   # SAINT reads the key from this environment variable, never from this file
+  spider:
+    max_depth: 5
+    max_duration_minutes: 10
+  passive_scan:
+    max_wait_minutes: 10
+  active_scan:
+    enabled_by_target_profile: true   # only runs if target profile == "full" (see targets.yaml)
+    max_duration_minutes: 30
+  report:
+    formats: ["json", "html"]
