@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 #
+# Pre-flight dependency check 
+
+for cmd in nmap yq python3; do 
+
+    if ! command -v "$cmd" &> /dev/null; then 
+
+        echo "[-] ERROR: Required tool '$cmd' is not installed. Please run ./setup.sh first." 
+
+        exit 1 
+
+    fi
+
 # scan.sh - SAINT master launcher
 #
 # Runs Nmap + ZAP against a target already listed in config/targets.yaml,

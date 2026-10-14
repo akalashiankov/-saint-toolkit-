@@ -1,0 +1,10 @@
+services:
+  security-scanner:
+    build: .
+    container_name: saint-toolkit-scanner
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./config:/app/config
+      - ./reports:/app/reports
+    entrypoint: ["./entrypoint.sh"]
