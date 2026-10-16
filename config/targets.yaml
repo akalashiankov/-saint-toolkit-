@@ -14,12 +14,12 @@
 # authorization, or "personal lab - owned by me").
 
 targets:
-  - name: example-lab-app
-    host: your-authorized-test-app.example
-    base_url: https://your-authorized-test-app.example
+  - name: Letshego UAT
+    host: UAT Environment
+    base_url: https://app.uat.letshego.com
     profile: light
-    authorized_by: "CHANGE_ME - name/org who authorized this"
-    authorization_ref: "CHANGE_ME - ticket/doc/lab reference"
+    authorized_by: "Donald Koketso"
+    authorization_ref: "saibt0036"
     notes: "Example entry. Replace with your real lab target before running scans."
 
 # Global settings applied to every scan run unless overridden per-target.
