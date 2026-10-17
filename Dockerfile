@@ -1,22 +1,20 @@
-FROM zaproxy/zap-stable
-
+FROM zaproxy/zap-stable:latest
 USER root
+
 RUN apt-get update && apt-get install -y \
-    python3 \
+    nmap \
+    perl \
+    libnet-ssleay-perl \
+    git \
     python3-pip \
-    python3-yaml \
     && rm -rf /var/lib/apt/lists/*
 
+RUN git clone https://github.com/sullo/nikto /opt/nikto && \
+    ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
+
 WORKDIR /app
-
-# Copy the local patched package and requirements
-COPY python-owasp-zap-v2-0.0.9 /app/python-owasp-zap-v2-0.0.9
 COPY requirements.txt .
-
-# Install dependencies without build isolation
-RUN pip3 install --no-cache-dir --no-build-isolation -e ./python-owasp-zap-v2-0.0.9 --break-system-packages
-RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages
-
-COPY . /app
-
-RUN chmod +x run_scan.py
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+COPY . .
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
