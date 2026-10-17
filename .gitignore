@@ -1,22 +1,7 @@
-# Scan output can contain sensitive findings - don't commit it by default.
-output/**/*.xml
-output/**/*.json
-output/**/*.html
-!output/manual_poc/manual_poc_template.json
-
-# Python
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Secrets
-.env
-*.key
-
-# OS
-.DS_Store
-output/
-.DS_Store
-output/
-.DS_Store
+*.pdf
+requests
+sys
+time
+run.sh
+.Dockerfile.swp
+Dockerfile.save
