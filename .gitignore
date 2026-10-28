@@ -1,7 +1,15 @@
+# Generated Reports & Artifacts
 *.pdf
-requests
-sys
-time
-run.sh
-.Dockerfile.swp
-Dockerfile.save
+output/
+reports/
+
+# Python Cache & Environment
+__pycache__/
+*.pyc
+.env
+.DS_Store
+
+# Scan Data / Logs
+*.json
+*.log
+targets.txt

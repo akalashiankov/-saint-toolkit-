@@ -42,7 +42,7 @@ def print_session_box(target, auth_mode):
 def wait_for_zap():
     print(f"{YELLOW}[*] Waiting for ZAP API daemon to accept connections...{RESET}", end="")
     sys.stdout.flush()
-    for _ in range(30):
+    for _ in range(60):
         try:
             response = requests.get(f"{ZAP_API_URL}/JSON/core/view/version/", timeout=2)
             if response.status_code == 200:
@@ -264,7 +264,7 @@ def run_scan_workflow():
                 "matchString": header_name,
                 "replacement": token,
                 "regex": "false"
-            }, timeout=5)
+            }, timeout=30)
             print(f"      {GREEN}[SUCCESS]{RESET} Custom authentication header injected into ZAP proxy rules.")
         except Exception as e:
             print(f"      {RED}[WARNING]{RESET} Could not set replacer rule: {e}")
@@ -279,16 +279,16 @@ def run_scan_workflow():
             
         print(f"      {YELLOW}[INFO]{RESET} Configuring ZAP session context against {login_url}...")
         try:
-            ctx_resp = requests.get(f"{ZAP_API_URL}/JSON/context/action/newContext/", params={"contextName": "SAINT-Auth-Context"}, timeout=5)
+            ctx_resp = requests.get(f"{ZAP_API_URL}/JSON/context/action/newContext/", params={"contextName": "SAINT-Auth-Context"}, timeout=30)
             ctx_id = ctx_resp.json().get("contextId")
             target_regex = target.rstrip("/") + ".*"
-            requests.get(f"{ZAP_API_URL}/JSON/context/action/includeInContext/", params={"contextName": "SAINT-Auth-Context", "regex": target_regex}, timeout=5)
+            requests.get(f"{ZAP_API_URL}/JSON/context/action/includeInContext/", params={"contextName": "SAINT-Auth-Context", "regex": target_regex}, timeout=30)
             login_request_data = f"username={username}&password={password}"
             requests.get(f"{ZAP_API_URL}/JSON/authentication/action/setAuthenticationMethod/", params={
                 "contextId": ctx_id,
                 "authMethodName": "formBasedAuthentication",
                 "authMethodConfigString": f"loginUrl={login_url}&loginRequestData={login_request_data}"
-            }, timeout=5)
+            }, timeout=30)
             print(f"      {GREEN}[SUCCESS]{RESET} Form authentication parameters registered.")
         except Exception as e:
             print(f"      {RED}[ERROR]{RESET} Failed to configure ZAP authentication context: {e}")
@@ -297,11 +297,11 @@ def run_scan_workflow():
             
     print(f"\n{YELLOW}[01]{RESET} Initiating Spider & Engine Scan against {target}...")
     try:
-        spider_resp = requests.get(f"{ZAP_API_URL}/JSON/spider/action/scan/", params={"url": target}, timeout=5)
+        spider_resp = requests.get(f"{ZAP_API_URL}/JSON/spider/action/scan/", params={"url": target}, timeout=30)
         spider_id = spider_resp.json().get("scan")
         
         while True:
-            status_resp = requests.get(f"{ZAP_API_URL}/JSON/spider/view/status/", params={"scanId": spider_id}, timeout=5)
+            status_resp = requests.get(f"{ZAP_API_URL}/JSON/spider/view/status/", params={"scanId": spider_id}, timeout=30)
             progress = int(status_resp.json().get("status", 100))
             print(f"      {CYAN}[SPIDER]{RESET} Progress: {progress}%", end="\r")
             if progress >= 100:
@@ -310,7 +310,7 @@ def run_scan_workflow():
             time.sleep(2)
             
         print(f"{YELLOW}[02]{RESET} Fetching scan results from ZAP engine...")
-        alerts_resp = requests.get(f"{ZAP_API_URL}/JSON/core/view/alerts/", params={"baseurl": target}, timeout=5)
+        alerts_resp = requests.get(f"{ZAP_API_URL}/JSON/core/view/alerts/", params={"baseurl": target}, timeout=30)
         alerts = alerts_resp.json().get("alerts", [])
         
         print(f"{YELLOW}[03]{RESET} Generating Comprehensive Executive PDF Report...")
@@ -336,7 +336,7 @@ def main_menu():
         choice = input(f"\n{BOLD}saint-toolkit> {RESET}").strip()
         
         if choice == "1":
-            v = requests.get(f"{ZAP_API_URL}/JSON/core/view/version/", timeout=5).json().get("version")
+            v = requests.get(f"{ZAP_API_URL}/JSON/core/view/version/", timeout=30).json().get("version")
             print(f"      {GREEN}[SUCCESS] ZAP Version: {v}{RESET}")
         elif choice == "2":
             run_scan_workflow()
